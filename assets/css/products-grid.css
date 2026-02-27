@@ -1,0 +1,270 @@
+/* Premium Product Grid Styles */
+:root {
+    --grid-gap: 20px;
+}
+
+/* Page Layout */
+.products-page-title {
+    font-family: 'Marcellus', serif;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    letter-spacing: -0.5px;
+}
+
+.filter-sidebar {
+    position: sticky;
+    top: 100px;
+}
+
+/* Filter Styles */
+.filter-group {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1.5rem;
+}
+
+.filter-group:last-child {
+    border-bottom: none;
+}
+
+.filter-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-link {
+    display: flex;
+    justify-content: space-between;
+    color: #555;
+    text-decoration: none;
+    padding: 5px 0;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+.filter-link:hover,
+.filter-link.active {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* Product Card */
+.product-grid-item {
+    transition: all 0.3s ease;
+}
+
+.product-card {
+    height: 100%;
+    position: relative;
+    border: none;
+    background: transparent;
+}
+
+.product-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    padding-top: 133%;
+    /* 3:4 Aspect Ratio */
+    background: var(--card-bg);
+    margin-bottom: 1rem;
+}
+
+.product-image-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.4s ease, transform 0.6s ease;
+}
+
+.secondary-img {
+    opacity: 0;
+    z-index: 1;
+}
+
+.product-image-wrapper:hover .primary-img {
+    opacity: 0;
+    /* Fade out primary if secondary exists, or keep it if handled by JS? actually CSS is better */
+}
+
+/* If secondary image exists, show it on hover */
+.product-image-wrapper:hover .secondary-img {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.product-image-wrapper:hover .primary-img {
+    /* If no secondary, maybe just zoom primary */
+    transform: scale(1.05);
+}
+
+
+/* Badges */
+.badge-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.card-badge {
+    padding: 4px 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #fff;
+    background: #000;
+}
+
+.badge-sale {
+    background-color: var(--accent-color, #ef4444);
+}
+
+.badge-new {
+    background-color: var(--primary-color, #D4AF37);
+    color: #000;
+}
+
+.badge-hot {
+    background-color: #ff5722;
+    color: #fff;
+}
+
+/* Quick Add Button */
+.quick-add-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    z-index: 2;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .quick-add-container {
+    transform: translateY(0);
+}
+
+.btn-quick-add {
+    width: 100%;
+    background: #fff;
+    color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-quick-add:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+}
+
+
+/* Product Info */
+.product-info {
+    text-align: center;
+}
+
+.product-meta {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.product-name a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--secondary-color);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.product-price {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--secondary-color);
+}
+
+
+.price-compare {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 0.9rem;
+    margin-left: 8px;
+    font-weight: 400;
+}
+
+/* Sort Select */
+.sort-select {
+    border: none;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+    padding: 5px 0;
+    font-size: 0.9rem;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.sort-select:focus {
+    box-shadow: none;
+    border-color: #000;
+}
+
+/* Pagination */
+.pagination .page-item .page-link {
+    border: 1px solid var(--border-color);
+    color: var(--secondary-color);
+    background: #fff;
+    font-weight: 500;
+    margin: 0 5px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+}
+
+
+/* Mobile Sidebar Wrapper */
+@media (max-width: 991px) {
+    .filter-sidebar {
+        display: none;
+        /* Hide standard sidebar on mobile, use offcanvas */
+    }
+}

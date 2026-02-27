@@ -1,0 +1,16 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /Edluxury/
+
+    # Rewrite rules for friendly URLs
+    RewriteRule ^product/([a-zA-Z0-9-]+)$ product.php?slug=$1 [L,QSA]
+    RewriteRule ^collection/([a-zA-Z0-9-]+)$ collection.php?slug=$1 [L,QSA]
+    RewriteRule ^category/([a-zA-Z0-9-]+)$ products.php?category=$1 [L,QSA]
+    RewriteRule ^page/([a-zA-Z0-9-]+)$ page.php?slug=$1 [L,QSA]
+</IfModule>
+
+# Disable directory browsing
+# Options -Indexes
+
+# Error documents
+# ErrorDocument 404 /Edluxury/index.php
