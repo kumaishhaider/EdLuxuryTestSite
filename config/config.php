@@ -40,10 +40,12 @@ define('DB_PASS', 'edluxury_password');
 define('DB_CHARSET', 'utf8mb4');
 
 // Site Configuration
-define('SITE_NAME', 'Edluxury');
-$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
-$host = $_SERVER['HTTP_HOST'] ?? '127.0.0.1';
-define('SITE_URL', $protocol . '://' . $host . '/Edluxury');
+define('SITE_NAME', 'EdLuxury');
+
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'];
+
+define('SITE_URL', $protocol . '://' . $host);
 define('ADMIN_URL', SITE_URL . '/admin');
 define('ASSETS_URL', SITE_URL . '/assets');
 define('UPLOADS_URL', SITE_URL . '/uploads');
