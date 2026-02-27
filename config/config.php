@@ -34,9 +34,9 @@ define('LANG_ATTR', CURRENT_LANG);
 
 // Database Configuration
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'edluxury_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_NAME', 'database_schema');
+define('DB_USER', 'edluxury_user');
+define('DB_PASS', 'edluxury_password');
 define('DB_CHARSET', 'utf8mb4');
 
 // Site Configuration
