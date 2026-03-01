@@ -25,6 +25,16 @@ $categories = $db->fetchAll("SELECT * FROM categories WHERE status = 'active' OR
 <html lang="<?php echo CURRENT_LANG; ?>" dir="<?php echo IS_RTL ? 'rtl' : 'ltr'; ?>">
 
 <head>
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WM4C7Y4QDS"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-WM4C7Y4QDS');
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
