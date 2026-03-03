@@ -772,7 +772,7 @@
 
                 <!-- Brand Column -->
                 <div class="col-12 col-md-6 col-lg-3 edl-brand-col">
-                    <a href="<?php echo Helpers::url('index.php'); ?>" class="edl-brand-logo">Edluxuryy</a>
+                    <a href="<?php echo Helpers::url('index.php'); ?>" class="edl-brand-logo">Edluxury</a>
                     <p class="edl-brand-tagline">Your premier destination for authentic, premium products in the UAE.
                         Excellence delivered to your door.</p>
 
