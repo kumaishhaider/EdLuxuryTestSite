@@ -1,4 +1,4 @@
-<?php
+        <?php
 /**
  * Admin Header - New Simplified & Robust Layout
  */
@@ -16,16 +16,15 @@ $siteName = $theme->get('site_name', 'Edluxury');
 <html lang="en">
 
 <head>
-        <!-- Google tag (gtag.js) -->
+    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WM4C7Y4QDS"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-    gtag('config', 'G-WM4C7Y4QDS');
+      gtag('config', 'G-ZBV7HXP5NP');
     </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Favicon -->
@@ -46,6 +45,11 @@ $siteName = $theme->get('site_name', 'Edluxury');
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <script>
+        const SITE_URL = '<?php echo SITE_URL; ?>';
+        const ADMIN_URL = '<?php echo ADMIN_URL; ?>';
+    </script>
 
     <!-- Ultra-Clean CSS -->
     <style>
@@ -150,13 +154,21 @@ $siteName = $theme->get('site_name', 'Edluxury');
                             href="<?php echo Helpers::adminUrl('products.php'); ?>"><i class="bi bi-box-seam me-1"></i>
                             Products</a></li>
                     <li class="nav-item"><a
+                            class="nav-link nav-link-admin <?php echo basename($_SERVER['PHP_SELF']) == 'product-sync.php' ? 'active' : ''; ?>"
+                            href="<?php echo Helpers::adminUrl('product-sync.php'); ?>"><i class="bi bi-magic me-1"></i>
+                             Sync</a></li>
+                    <li class="nav-item"><a
                             class="nav-link nav-link-admin <?php echo basename($_SERVER['PHP_SELF']) == 'categories.php' ? 'active' : ''; ?>"
                             href="<?php echo Helpers::adminUrl('categories.php'); ?>"><i class="bi bi-tags me-1"></i>
                             Categories</a></li>
                     <li class="nav-item"><a
                             class="nav-link nav-link-admin <?php echo basename($_SERVER['PHP_SELF']) == 'customers.php' ? 'active' : ''; ?>"
                             href="<?php echo Helpers::adminUrl('customers.php'); ?>"><i class="bi bi-people me-1"></i>
-                            customers</a></li>
+                            Customers</a></li>
+                    <li class="nav-item"><a
+                            class="nav-link nav-link-admin <?php echo basename($_SERVER['PHP_SELF']) == 'reports.php' ? 'active' : ''; ?>"
+                            href="<?php echo Helpers::adminUrl('reports.php'); ?>"><i class="bi bi-bar-chart-line me-1"></i>
+                            Reports</a></li>
                     <li class="nav-item"><a
                             class="nav-link nav-link-admin <?php echo basename($_SERVER['PHP_SELF']) == 'theme-settings.php' ? 'active' : ''; ?>"
                             href="<?php echo Helpers::adminUrl('theme-settings.php'); ?>"><i

@@ -324,4 +324,17 @@ class Product
 
         return $this->db->fetchAll($sql, [$searchTerm, $searchTerm, $searchTerm, $limit]);
     }
+
+    /**
+     * Get add-to-cart count for a product
+     */
+    public function getAddToCartCount($productId, $hours = 24)
+    {
+        $sql = "SELECT COUNT(*) as count FROM analytics_events 
+                WHERE event_type = 'add_to_cart' 
+                AND product_id = ? 
+                AND created_at >= DATE_SUB(NOW(), INTERVAL ? HOUR)";
+        $result = $this->db->fetchOne($sql, [$productId, $hours]);
+        return $result['count'] ?? 0;
+    }
 }

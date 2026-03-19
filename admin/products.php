@@ -39,7 +39,11 @@ $sql = "SELECT p.*, c.name as category_name
 $products = $db->fetchAll($sql, $params);
 ?>
 
-<div class="d-flex justify-content-end mb-4">
+<div class="d-flex justify-content-end gap-2 mb-4">
+    <a href="<?php echo Helpers::adminUrl('product-sync.php'); ?>"
+        class="btn btn-outline-primary fw-bold shadow-sm">
+        <i class="bi bi-magic me-2"></i>Magic Sync
+    </a>
     <a href="<?php echo Helpers::adminUrl('product-form.php'); ?>"
         class="btn btn-primary btn-primary-admin fw-bold shadow-sm">
         <i class="bi bi-plus-lg me-2"></i>New Product

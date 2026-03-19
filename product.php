@@ -233,7 +233,7 @@ $sampleReviews = [
         <?php echo Security::escape($product['category_name'] ?: 'PREMIUM COLLECTION'); ?>
     </span>
     <h1 class="sh-heading-1 mb-1" style="line-height: 1.2; font-size: 1.6rem; font-weight: 800; color: #121826;">
-        <?php echo Security::escape($product['name']); ?>
+        <?php echo Security::escape($product['name']); ?> <i class="bi bi-patch-check-fill text-primary ms-1" style="font-size: 0.7em; vertical-align: middle;" title="Verified Original"></i>
     </h1>
     <?php if (!empty($product['name_ar'])): ?>
         <div class="product-name-ar-badge mb-2 d-inline-block">
@@ -280,8 +280,8 @@ $sampleReviews = [
     <div class="container-fluid px-3 px-md-4 px-lg-5">
         <div class="row g-4 g-lg-5">
 
-            <!-- Left: Premium Product Gallery -->
-            <div class="col-lg-6" data-aos="fade-right">
+            <!-- Left: Premium Product Gallery (Expanded to 7/12 for Desktop) -->
+            <div class="col-lg-7" data-aos="fade-right">
 
                 <style>
                     /* ======================================
@@ -523,7 +523,9 @@ $sampleReviews = [
                         <!-- Main Image -->
                         <img id="luxeMainImg"
                              src="<?php echo Helpers::upload($productImages[0]['image_path']); ?>"
-                             alt="<?php echo Security::escape($product['name']); ?>">
+                             alt="<?php echo Security::escape($product['name']); ?>"
+                             width="800" height="800"
+                             fetchpriority="high" decoding="async">
 
                         <!-- Badges -->
                         <div class="luxe-badge-area">
@@ -688,35 +690,199 @@ $sampleReviews = [
                         $isIframe = true;
                     }
                     ?>
-                    <div class="mt-4" data-aos="fade-up">
-                        <div class="d-flex align-items-center gap-2 mb-3">
-                            <div style="width:32px;height:32px;background:linear-gradient(135deg,#0F3D3E,#1a5f61);border-radius:50%;display:flex;align-items:center;justify-content:center;">
-                                <i class="bi bi-play-fill text-white" style="font-size:14px;"></i>
+                    <div class="mt-5 mb-5 luxe-video-container" data-aos="fade-up">
+                        <div class="d-flex align-items-center justify-content-between mb-4 px-1">
+                            <div class="d-flex align-items-center gap-3">
+                                <div style="width:40px;height:40px;background:linear-gradient(135deg,#C5A059,#B28221);border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(197,160,89,0.3);">
+                                    <i class="bi bi-play-circle-fill text-white" style="font-size:18px;"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-0" style="font-size:15px;text-transform:uppercase;letter-spacing:1px;color:#121826;">Featured Video</h6>
+                                    <span class="text-muted" style="font-size:11px;">Watch the product in action</span>
+                                </div>
                             </div>
-                            <span class="fw-bold" style="font-size:14px;text-transform:uppercase;letter-spacing:1px;color:#0F3D3E;">Product Video</span>
                         </div>
-                        <?php if ($isIframe): ?>
-                            <div class="ratio ratio-16x9 rounded-4 overflow-hidden shadow-sm" style="border:2px solid #eee;">
-                                <iframe src="<?php echo htmlspecialchars($embedUrl); ?>"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen
-                                    title="<?php echo Security::escape($product['name']); ?> - Product Video"></iframe>
-                            </div>
-                        <?php else: ?>
-                            <div class="rounded-4 overflow-hidden shadow-sm" style="border:2px solid #eee;">
-                                <video controls class="w-100" style="display:block;max-height:360px;object-fit:cover;">
+                        <div class="luxe-video-wrapper">
+                            <?php if ($isIframe): ?>
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="<?php echo htmlspecialchars($embedUrl); ?>"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen
+                                        title="<?php echo Security::escape($product['name']); ?> - Product Video"></iframe>
+                                </div>
+                            <?php else: ?>
+                                <video controls class="w-100 h-100" style="object-fit:cover;">
                                     <source src="<?php echo htmlspecialchars($embedUrl); ?>" type="video/mp4">
                                 </video>
-                            </div>
-                        <?php endif; ?>
+                            <?php endif; ?>
+                            <div class="luxe-video-glow"></div>
+                        </div>
+                        
+                        <style>
+                            .luxe-video-container {
+                                position: relative;
+                            }
+                            .luxe-video-wrapper {
+                                position: relative;
+                                border-radius: 20px;
+                                overflow: hidden;
+                                background: #000;
+                                border: 1.5px solid rgba(197,160,89,0.2);
+                                box-shadow: 0 20px 40px rgba(0,0,0,0.12), 0 0 0 10px rgba(248, 248, 248, 0.5);
+                                z-index: 2;
+                            }
+                            .luxe-video-wrapper iframe, .luxe-video-wrapper video {
+                                display: block;
+                                max-height: 400px; /* limits huge vertical videos */
+                            }
+                            .luxe-video-glow {
+                                position: absolute;
+                                bottom: -20px;
+                                left: 5%;
+                                right: 5%;
+                                height: 30px;
+                                background: #C5A059;
+                                filter: blur(30px);
+                                opacity: 0.3;
+                                z-index: -1;
+                            }
+                        </style>
                     </div>
+                <?php endif; ?>
+
+                <?php
+                // Extended Description Section
+                $extendedDesc = $product['extended_description'] ?? '';
+                if (!empty($extendedDesc)): ?>
+                    <div class="mt-4 luxe-extended-desc-wrap" data-aos="fade-up">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <div style="width:32px;height:32px;background:linear-gradient(135deg,#C5A059,#B28221);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                                    <i class="bi bi-info-lg text-white" style="font-size:14px;"></i>
+                                </div>
+                                <span class="fw-bold" style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:#8B6E32;">Product Excellence</span>
+                            </div>
+                        </div>
+                        
+                        <div class="luxe-desc-content" id="luxeDescContent">
+                            <div class="luxe-desc-inner">
+                                <?php echo nl2br(Security::escape($extendedDesc)); ?>
+                            </div>
+                            <div class="luxe-desc-overlay"></div>
+                        </div>
+                        
+                        <button class="btn luxe-show-more-btn mt-3" id="luxeShowMoreBtn" onclick="toggleExtendedDesc()">
+                            <span>Show More</span>
+                            <i class="bi bi-chevron-down ms-2"></i>
+                        </button>
+
+                        <!-- Trust Mini-Grid -->
+                        <div class="mt-4 pt-4 border-top">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-patch-check-fill text-success"></i>
+                                        <span class="small fw-bold text-muted" style="font-size: 11px;">100% ORIGINAL</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-shield-lock-fill text-primary"></i>
+                                        <span class="small fw-bold text-muted" style="font-size: 11px;">SECURE BUY</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <style>
+                        .luxe-extended-desc-wrap {
+                            background: #ffffff;
+                            border: 1.5px solid #f0f0f5;
+                            padding: 28px;
+                            border-radius: 24px;
+                            box-shadow: 0 12px 40px rgba(0,0,0,0.03);
+                            position: relative;
+                            overflow: hidden;
+                        }
+                        .luxe-desc-content {
+                            position: relative;
+                            max-height: 140px;
+                            overflow: hidden;
+                            transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+                            font-size: 15px;
+                            line-height: 1.8;
+                            color: #475569;
+                        }
+                        .luxe-desc-content.expanded {
+                            max-height: 3000px;
+                        }
+                        .luxe-desc-overlay {
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                            height: 80px;
+                            background: linear-gradient(to top, #ffffff, rgba(255,255,255,0));
+                            pointer-events: none;
+                            transition: opacity 0.3s ease;
+                        }
+                        .luxe-desc-content.expanded .luxe-desc-overlay {
+                            opacity: 0;
+                        }
+                        .luxe-show-more-btn {
+                            background: #f8fafc;
+                            border: 1.5px solid #e2e8f0;
+                            color: #1e293b;
+                            font-weight: 700;
+                            font-size: 12px;
+                            padding: 10px 24px;
+                            border-radius: 50px;
+                            transition: all 0.3s ease;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                        }
+                        .luxe-show-more-btn:hover {
+                            background: #1e293b;
+                            color: #fff;
+                            border-color: #1e293b;
+                            transform: translateY(-2px);
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                        }
+                        .luxe-show-more-btn i {
+                            transition: transform 0.4s ease;
+                        }
+                        .luxe-show-more-btn.active i {
+                            transform: rotate(180deg);
+                        }
+                    </style>
+
+                    <script>
+                        function toggleExtendedDesc() {
+                            const content = document.getElementById('luxeDescContent');
+                            const btn = document.getElementById('luxeShowMoreBtn');
+                            const btnText = btn.querySelector('span');
+                            
+                            content.classList.toggle('expanded');
+                            btn.classList.toggle('active');
+                            
+                            if (content.classList.contains('expanded')) {
+                                btnText.textContent = 'Show Less';
+                            } else {
+                                btnText.textContent = 'Show More';
+                                setTimeout(() => {
+                                    btn.closest('.luxe-extended-desc-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }, 100);
+                            }
+                        }
+                    </script>
                 <?php endif; ?>
 
             </div>
 
-            <!-- Right: Product Info -->
-            <div class="col-lg-6" data-aos="fade-left">
-                <div class="product-info">
+            <!-- Right: Product Info (Optimized 5/12) -->
+            <div class="col-lg-5" data-aos="fade-left">
+                <div class="product-info sticky-lg-top" style="top: 100px;">
                     <!-- Category Badge (hidden on mobile since we show it above gallery) -->
                     <span class="sh-section-subtitle d-none d-lg-inline-block text-start mb-3"
                         style="font-size: 11px; padding: 5px 12px;">
@@ -725,7 +891,7 @@ $sampleReviews = [
 
                     <!-- Title (Bilingual: English + Arabic) - hidden on mobile since shown above gallery -->
                     <h1 class="sh-heading-1 mb-2 d-none d-lg-block" style="line-height: 1.2; font-size: 2.8rem; font-weight: 800; color: #121826; letter-spacing: -1px;" id="productNameEn">
-                        <?php echo Security::escape($product['name']); ?>
+                        <?php echo Security::escape($product['name']); ?> <i class="bi bi-patch-check-fill text-primary ms-1" style="font-size: 0.45em; vertical-align: middle;" title="Verified Original"></i>
                     </h1>
                     <?php if (!empty($product['name_ar'])): ?>
                         <div class="product-name-ar-badge-lg mb-4 d-none d-lg-inline-block">
@@ -860,11 +1026,26 @@ $sampleReviews = [
                         </style>
                     </div>
 
-                    <!-- Description -->
-                    <div class="mb-4">
-                        <p class="text-muted" style="font-size: 15px; line-height: 1.8;">
-                            <?php echo nl2br(Security::escape($product['description'])); ?>
+                    <!-- Description (Styled Card) -->
+                    <div class="mb-4 p-3 rounded-4" style="background:#f8fafc; border:1px solid #f1f5f9;">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <i class="bi bi-file-text-fill" style="font-size:16px; color:#C5A059;"></i>
+                            <span class="fw-bold text-uppercase" style="font-size:11px; letter-spacing:0.8px; color:#64748b;">Overview</span>
+                        </div>
+                        <p class="mb-2" style="font-size: 14px; line-height: 1.75; color:#475569;">
+                            <?php 
+                            $shortDesc = $product['description'];
+                            if (strlen($shortDesc) > 200) {
+                                $shortDesc = substr($shortDesc, 0, 200) . '...';
+                            }
+                            echo nl2br(Security::escape($shortDesc)); 
+                            ?>
                         </p>
+                        <?php if (strlen($product['description']) > 200): ?>
+                        <a href="#tab-details" class="text-decoration-none d-inline-flex align-items-center gap-1" style="font-size:12px; font-weight:700; color:#C5A059;" onclick="document.querySelector('[data-bs-target=\'#tab-details\']').click(); setTimeout(()=>document.getElementById('tab-details').scrollIntoView({behavior:'smooth',block:'start'}),200);">
+                            Read Full Description <i class="bi bi-arrow-right"></i>
+                        </a>
+                        <?php endif; ?>
                     </div>
 
                     <!-- PREMIUM HIGHLIGHTS GRID -->
@@ -1208,12 +1389,49 @@ $sampleReviews = [
                         </div>
 
                         <!-- Buy Now — Gold Glow CTA -->
-                        <div class="mb-3">
+                        <div class="mb-2">
+                            <?php 
+                            $atcCount = $productModel->getAddToCartCount($product['id'], 24);
+                            if ($atcCount >= 5): 
+                            ?>
+                                <div class="d-flex align-items-center gap-2 mb-2 px-1">
+                                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-3 py-1 fw-bold" style="font-size: 10px; letter-spacing: 0.5px;">
+                                        🔥 TRENDING: Added to cart <?php echo $atcCount; ?> times today
+                                    </span>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <div class="d-flex align-items-center gap-2 mb-2 px-1">
+                                <span class="pulse-red"></span>
+                                <span style="font-size: 11px; font-weight: 700; color: #ef4444; letter-spacing: 0.5px;">LIMITED STOCK: SELL-OUT RISK IS HIGH</span>
+                            </div>
                             <button class="luxe-buy-btn" onclick="buyNow()" id="buyNowBtn">
                                 <i class="bi bi-lightning-fill lightning-icon"></i>
                                 <?php echo !empty($product['custom_buy_button']) ? Security::escape($product['custom_buy_button']) : 'Buy Now — Express Checkout'; ?>
                             </button>
                         </div>
+
+                        <!-- WhatsApp Ordering (UAE Favorite) -->
+                        <div class="mb-3">
+                            <a href="https://wa.me/923491697043?text=I%20want%20to%20order%20<?php echo urlencode($product['name']); ?>" 
+                               target="_blank" 
+                               class="d-flex align-items-center justify-content-center gap-2 w-100 rounded-pill border-0 py-2.5" 
+                               style="background: #25D366; color: #fff; font-size: 13px; font-weight: 700; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);">
+                                <i class="bi bi-whatsapp"></i> ORDER VIA WHATSAPP
+                            </a>
+                        </div>
+
+                        <style>
+                            .pulse-red {
+                                width: 8px; height: 8px; background: #ef4444; border-radius: 50%;
+                                display: inline-block; position: relative;
+                            }
+                            .pulse-red::after {
+                                content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #ef4444;
+                                animation: pulse-red-anim 1.5s infinite;
+                            }
+                            @keyframes pulse-red-anim { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(2.5); opacity: 0; } }
+                        </style>
 
                         <!-- Trust Micro-Badges -->
                         <div class="luxe-trust-strip mb-4">
@@ -1325,120 +1543,111 @@ $sampleReviews = [
                             .bundle-badge.gold { background: #C5A059; color: #000; }
                         </style>
 
-                        <!-- NEW: Animated Trust Reviews Snippet -->
+                        <!-- PREMIUM: Animated Trust Reviews Snippet (Redesigned) -->
                         <div class="trust-reviews-snippet mb-4 p-4 rounded-4"
-                            style="background: #fdfdfd; border: 1px solid #eee; min-height: 200px; position: relative; overflow: hidden;">
-                            <div class="d-flex align-items-center gap-2 mb-3">
-                                <div class="flex-grow-1">
-                                    <h6 class="fw-bold mb-1" style="font-size: 14px;">Recent Customer Feedback</h6>
+                            style="background: #ffffff; border: 1.5px solid #f0f0f5; min-height: 240px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
+                            
+                            <!-- Header Area -->
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <div>
+                                    <h6 class="fw-bold mb-1" style="font-size: 14px; color: #1e293b; letter-spacing: 1px; text-transform: uppercase;">Real Customer Voices</h6>
                                     <div class="d-flex align-items-center gap-2">
-                                        <div class="text-warning small" style="font-size: 12px;">
+                                        <div class="text-warning d-flex gap-0.5" style="font-size: 11px;">
                                             <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
                                                 class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
                                                 class="bi bi-star-fill"></i>
                                         </div>
-                                        <span class="text-muted" style="font-size: 11px;">(4.9/5 based on
-                                            <?php echo $reviewStats['total']; ?> reviews)</span>
+                                        <span style="font-size: 11px; color: #64748b; font-weight: 600;">4.9 / 5.0 Rating</span>
                                     </div>
                                 </div>
-                                <div class="d-flex gap-1" id="review-nav-dots">
+                                <div class="d-flex gap-1.5" id="review-nav-dots">
                                     <span class="dot active"></span>
                                     <span class="dot"></span>
                                     <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
                                 </div>
                             </div>
 
-                            <div class="mini-reviews-slider" id="miniReviewSlider">
-                                <div class="mini-review-slide active">
-                                    <div class="d-flex justify-content-between mb-1"
-                                        dir="<?php echo CURRENT_LANG === 'ar' ? 'rtl' : 'ltr'; ?>">
-                                        <span class="fw-bold"
-                                            style="font-size: 12px;"><?php echo CURRENT_LANG === 'ar' ? 'راشد م.' : 'Rashid M.'; ?>
-                                            <i class="bi bi-patch-check-fill text-primary ms-1"></i></span>
-                                        <span class="text-muted"
-                                            style="font-size: 10px;"><?php echo CURRENT_LANG === 'ar' ? 'دبي، الإمارات' : 'Dubai, UAE'; ?></span>
+                            <!-- Slider -->
+                            <div class="mini-reviews-slider" id="miniReviewSlider" style="height: 120px; position: relative;">
+                                <?php 
+                                $reviews = [
+                                    ['name' => 'Rashid M.', 'city' => 'Dubai, UAE', 'bg' => '#E0F2FE', 'color' => '#0369A1', 'text' => 'Excellent quality, super fast delivery in Dubai. This is even better than what\'s shown in pictures. Highly recommend!'],
+                                    ['name' => 'Amna S.', 'city' => 'Abu Dhabi', 'bg' => '#F0FDF4', 'color' => '#15803D', 'text' => 'Best purchase this month. The finish is very premium and it feels substantial. Definitely looks like a high-end luxury item.'],
+                                    ['name' => 'Fatima H.', 'city' => 'Sharjah', 'bg' => '#FEF2F2', 'color' => '#B91C1C', 'text' => 'Gifted this to my sister and she absolutely loves it. The packaging was beautiful and it arrived within 24 hours.'],
+                                    ['name' => 'Khalid L.', 'city' => 'Ajman', 'bg' => '#FFF7ED', 'color' => '#C2410C', 'text' => 'Impressive quality and very fast shipping. The customer service was also very helpful through WhatsApp.'],
+                                    ['name' => 'Noora B.', 'city' => 'Al Ain', 'bg' => '#F5F3FF', 'color' => '#6D28D9', 'text' => 'Totally worth the price. It feels like a boutique product. I will definitely buy again from Edluxury!']
+                                ];
+                                foreach($reviews as $i => $rev): ?>
+                                <div class="mini-review-slide <?php echo $i === 0 ? 'active' : ''; ?>">
+                                    <div class="d-flex align-items-center gap-3 mb-2">
+                                        <div class="avatar-circle" style="background: <?php echo $rev['bg']; ?>; color: <?php echo $rev['color']; ?>;">
+                                            <?php echo substr($rev['name'], 0, 1); ?>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex align-items-center gap-1.5">
+                                                <span class="fw-bold" style="font-size: 13px; color: #1e293b;"><?php echo $rev['name']; ?></span>
+                                                <i class="bi bi-patch-check-fill text-success" style="font-size: 12px;" title="Verified Purchase"></i>
+                                            </div>
+                                            <span class="text-muted" style="font-size: 10px;"><?php echo $rev['city']; ?></span>
+                                        </div>
+                                        <div class="ms-auto">
+                                            <span class="badge" style="background: #f1f5f9; color: #64748b; font-size: 9px; padding: 4px 8px;">Purchased Recently</span>
+                                        </div>
                                     </div>
-                                    <p class="mb-0 text-secondary"
-                                        style="font-size: 12px; line-height: 1.4; text-align: <?php echo CURRENT_LANG === 'ar' ? 'right' : 'left'; ?>;"
-                                        dir="<?php echo CURRENT_LANG === 'ar' ? 'rtl' : 'ltr'; ?>">
-                                        "<?php echo CURRENT_LANG === 'ar' ? 'جودة ممتازة، وتوصيل سريع جداً في دبي. المنتج أفضل حتى مما يظهر في الصور. أنصح به بشدة!' : 'Excellent quality, super fast delivery in Dubai. This is even better than what\'s shown in pictures. Highly recommend!'; ?>"
+                                    <p class="mb-0 text-secondary" style="font-size: 13px; line-height: 1.6; font-style: italic; color: #475569;">
+                                        "<?php echo $rev['text']; ?>"
                                     </p>
                                 </div>
-                                <div class="mini-review-slide">
-                                    <div class="d-flex justify-content-between mb-1"
-                                        dir="<?php echo CURRENT_LANG === 'ar' ? 'rtl' : 'ltr'; ?>">
-                                        <span class="fw-bold"
-                                            style="font-size: 12px;"><?php echo CURRENT_LANG === 'ar' ? 'آمنة السيد' : 'Amna Al Sayed'; ?>
-                                            <i class="bi bi-patch-check-fill text-primary ms-1"></i></span>
-                                        <span class="text-muted"
-                                            style="font-size: 10px;"><?php echo CURRENT_LANG === 'ar' ? 'أبوظبي' : 'Abu Dhabi'; ?></span>
-                                    </div>
-                                    <p class="mb-0 text-secondary"
-                                        style="font-size: 12px; line-height: 1.4; text-align: <?php echo CURRENT_LANG === 'ar' ? 'right' : 'left'; ?>;"
-                                        dir="<?php echo CURRENT_LANG === 'ar' ? 'rtl' : 'ltr'; ?>">
-                                        "<?php echo CURRENT_LANG === 'ar' ? 'أفضل عملية شراء هذا الشهر. اللمسات النهائية فاخرة للغاية ويشعرك بالفخامة. يبدو تماماً كقطعة فاخرة من المتاجر العالمية.' : 'Best purchase this month. The finish is very premium and it feels substantial. Definitely looks like a high-end luxury item.'; ?>"
-                                    </p>
-                                </div>
-                                <div class="mini-review-slide">
-                                    <div class="d-flex justify-content-between mb-1"
-                                        dir="<?php echo CURRENT_LANG === 'ar' ? 'rtl' : 'ltr'; ?>">
-                                        <span class="fw-bold"
-                                            style="font-size: 12px;"><?php echo CURRENT_LANG === 'ar' ? 'فاطمة ح.' : 'Fatima H.'; ?>
-                                            <i class="bi bi-patch-check-fill text-primary ms-1"></i></span>
-                                        <span class="text-muted"
-                                            style="font-size: 10px;"><?php echo CURRENT_LANG === 'ar' ? 'الشارقة' : 'Sharjah'; ?></span>
-                                    </div>
-                                    <p class="mb-0 text-secondary"
-                                        style="font-size: 12px; line-height: 1.4; text-align: <?php echo CURRENT_LANG === 'ar' ? 'right' : 'left'; ?>;"
-                                        dir="<?php echo CURRENT_LANG === 'ar' ? 'rtl' : 'ltr'; ?>">
-                                        "<?php echo CURRENT_LANG === 'ar' ? 'أهديت هذا المنتج لأختي وقد أحبته تماماً. كان التغليف جميلاً ووصل خليل أقل من 24 ساعة.' : 'Gifted this to my sister and she absolutely loves it. The packaging was beautiful and it arrived within 24 hours.'; ?>"
-                                    </p>
-                                </div>
+                                <?php endforeach; ?>
                             </div>
 
-                            <div class="text-center mt-3 pt-2 border-top">
-                                <a href="#reviews" class="text-primary text-decoration-none fw-bold"
-                                    style="font-size: 11px;">View All <?php echo $reviewStats['total']; ?> Reviews <i
-                                        class="bi bi-arrow-right ms-1"></i></a>
+                            <!-- Footer -->
+                            <div class="text-center mt-3 pt-3 border-top" style="border-top-color: #f1f5f9 !important;">
+                                <a href="#reviews" class="text-primary text-decoration-none fw-bold d-flex align-items-center justify-content-center gap-1.5"
+                                    style="font-size: 12px; transition: all 0.2s ease;">
+                                    <span>READ ALL <?php echo $reviewStats['total']; ?> REVIEWS</span>
+                                    <i class="bi bi-arrow-right-short fs-5"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- CONVERSION BOOSTER: Live Activity -->
+                        <div class="luxe-activity-card mb-4 p-3 rounded-4" style="background: #f8fafc; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 12px;">
+                            <div class="activity-icon">
+                                <i class="bi bi-lightning-charge-fill text-warning"></i>
+                            </div>
+                            <div class="activity-text">
+                                <p class="mb-0" style="font-size: 12px; font-weight: 700; color: #1e293b;">
+                                    HIGH DEMAND: <span class="text-danger">14 orders</span> in the last 24 hours
+                                </p>
+                                <p class="mb-0 text-muted" style="font-size: 11px;">Most customers in Dubai choose this model.</p>
                             </div>
                         </div>
 
                         <style>
-                            .mini-reviews-slider {
-                                position: relative;
-                                height: 80px;
+                            .avatar-circle {
+                                width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                                font-weight: 800; font-size: 14px; flex-shrink: 0;
                             }
-
+                            .mini-reviews-slider { overflow: hidden; }
                             .mini-review-slide {
-                                position: absolute;
-                                top: 0;
-                                left: 0;
-                                width: 100%;
-                                opacity: 0;
-                                visibility: hidden;
-                                transition: all 0.6s ease;
-                                transform: translateX(20px);
+                                position: absolute; top: 0; left: 0; width: 100%; opacity: 0; visibility: hidden;
+                                transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform: translateY(10px);
                             }
-
-                            .mini-review-slide.active {
-                                opacity: 1;
-                                visibility: visible;
-                                transform: translateX(0);
-                            }
-
+                            .mini-review-slide.active { opacity: 1; visibility: visible; transform: translateY(0); }
+                            
                             #review-nav-dots .dot {
-                                width: 6px;
-                                height: 6px;
-                                border-radius: 50%;
-                                background: #eee;
-                                display: inline-block;
-                                transition: all 0.3s ease;
+                                width: 6px; height: 6px; border-radius: 50%; background: #e2e8f0;
+                                display: inline-block; cursor: pointer; transition: all 0.3s ease;
                             }
-
-                            #review-nav-dots .dot.active {
-                                background: var(--sh-primary);
-                                width: 12px;
-                                border-radius: 4px;
+                            #review-nav-dots .dot.active { background: #C5A059; width: 18px; border-radius: 4px; }
+                            
+                            .luxe-activity-card .activity-icon {
+                                width: 32px; height: 32px; background: #fff; border-radius: 50%;
+                                display: flex; align-items: center; justify-content: center;
+                                box-shadow: 0 4px 10px rgba(0,0,0,0.05);
                             }
                         </style>
 
@@ -1446,19 +1655,33 @@ $sampleReviews = [
                             document.addEventListener('DOMContentLoaded', function () {
                                 const slides = document.querySelectorAll('.mini-review-slide');
                                 const dots = document.querySelectorAll('#review-nav-dots .dot');
-                                let currentSlide = 0;
+                                let current = 0;
 
-                                function nextSlide() {
-                                    slides[currentSlide].classList.remove('active');
-                                    dots[currentSlide].classList.remove('active');
-
-                                    currentSlide = (currentSlide + 1) % slides.length;
-
-                                    slides[currentSlide].classList.add('active');
-                                    dots[currentSlide].classList.add('active');
+                                function showSlide(index) {
+                                    slides.forEach(s => s.classList.remove('active'));
+                                    dots.forEach(d => d.classList.remove('active'));
+                                    slides[index].classList.add('active');
+                                    dots[index].classList.add('active');
                                 }
 
-                                setInterval(nextSlide, 4000);
+                                function nextSlide() {
+                                    current = (current + 1) % slides.length;
+                                    showSlide(current);
+                                }
+
+                                dots.forEach((dot, idx) => {
+                                    dot.addEventListener('click', () => {
+                                        current = idx;
+                                        showSlide(current);
+                                        resetInterval();
+                                    });
+                                });
+
+                                let slideInterval = setInterval(nextSlide, 5000);
+                                function resetInterval() {
+                                    clearInterval(slideInterval);
+                                    slideInterval = setInterval(nextSlide, 5000);
+                                }
                             });
                         </script>
                     <?php else: ?>
@@ -1474,39 +1697,7 @@ $sampleReviews = [
                     <?php endif; ?>
 
 
-                    <!-- PREMIUM ELITE SERVICE BAR (Modernized) -->
-                    <div class="mt-5 p-4 rounded-4" style="background: #fafafa; border: 1.5px solid #f0f0f5;">
-                        <div class="row g-4 text-center">
-                            <div class="col-6 col-md-3">
-                                <div class="luxe-feature">
-                                    <div class="icon-wrap"><i class="bi bi-truck"></i></div>
-                                    <h6>Free Delivery</h6>
-                                    <p>Fast UAE Shipping</p>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-3">
-                                <div class="luxe-feature">
-                                    <div class="icon-wrap gold"><i class="bi bi-patch-check"></i></div>
-                                    <h6>100% Genuine</h6>
-                                    <p>Verified Quality</p>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-3">
-                                <div class="luxe-feature">
-                                    <div class="icon-wrap blue"><i class="bi bi-arrow-repeat"></i></div>
-                                    <h6>Easy Returns</h6>
-                                    <p>14 Day Window</p>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-3">
-                                <div class="luxe-feature">
-                                    <div class="icon-wrap black"><i class="bi bi-headset"></i></div>
-                                    <h6>24/7 Support</h6>
-                                    <p>Dedicated Team</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <style>
                         .luxe-feature h6 { font-size: 13px; font-weight: 800; color: #1e293b; margin: 12px 0 4px; text-transform: uppercase; letter-spacing: 0.5px; }
                         .luxe-feature p { font-size: 11px; color: #94a3b8; margin: 0; font-weight: 500; }
@@ -1526,117 +1717,565 @@ $sampleReviews = [
     </div>
 </section>
 
-<!-- Product Details Tabs -->
-<section class="sh-section-sm" style="background: var(--sh-gray-50);">
+<!-- ══════════════════════════════════════════════════════
+     PREMIUM PRODUCT DETAILS TABS — COMPLETELY REDESIGNED
+     ══════════════════════════════════════════════════════ -->
+<style>
+    /* Premium Tab Styling */
+    .pdp-tabs-wrap .nav-pills .nav-link {
+        background: #fff;
+        border: 1.5px solid #e2e8f0;
+        color: #475569;
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        padding: 10px 24px;
+        transition: all 0.3s ease;
+    }
+    .pdp-tabs-wrap .nav-pills .nav-link:hover {
+        border-color: #C5A059;
+        color: #C5A059;
+        transform: translateY(-2px);
+    }
+    .pdp-tabs-wrap .nav-pills .nav-link.active {
+        background: linear-gradient(135deg, #1e293b, #334155);
+        border-color: #1e293b;
+        color: #fff;
+        box-shadow: 0 6px 20px rgba(30,41,59,0.2);
+    }
+    .pdp-tabs-wrap .nav-pills .nav-link i { font-size: 15px; }
+    
+    .pdp-tab-content {
+        background: #fff;
+        border-radius: 20px;
+        padding: 0;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.04);
+        border: 1px solid #f1f5f9;
+        overflow: hidden;
+    }
+    
+    /* Description Feature Card */
+    .pdp-feature-card {
+        background: #f8fafc;
+        border: 1px solid #f1f5f9;
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    .pdp-feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+        border-color: #C5A059;
+    }
+    .pdp-feature-icon {
+        width: 56px; height: 56px;
+        border-radius: 16px;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 14px;
+        font-size: 24px;
+        transition: transform 0.3s ease;
+    }
+    .pdp-feature-card:hover .pdp-feature-icon { transform: scale(1.1) rotate(5deg); }
+    
+    /* How to Use Steps */
+    .pdp-step-card {
+        text-align: center;
+        padding: 20px;
+        position: relative;
+    }
+    .pdp-step-number {
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #C5A059, #D4AF37);
+        color: #fff;
+        font-weight: 800;
+        font-size: 16px;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 14px;
+        box-shadow: 0 4px 12px rgba(197,160,89,0.3);
+    }
+    .pdp-step-connector {
+        position: absolute;
+        top: 40px;
+        right: -15%;
+        width: 30%;
+        height: 2px;
+        background: linear-gradient(90deg, #C5A059, #e2e8f0);
+    }
+    
+    /* Guarantee Strip */
+    .pdp-guarantee-strip {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-radius: 16px;
+        padding: 28px;
+        color: #fff;
+    }
+    .pdp-guarantee-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .pdp-guarantee-icon {
+        width: 44px; height: 44px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.1);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+    
+    /* Shipping Timeline */
+    .pdp-timeline-step {
+        display: flex; align-items: flex-start; gap: 16px;
+        padding: 16px 0;
+        position: relative;
+    }
+    .pdp-timeline-step:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: 19px;
+        top: 56px;
+        width: 2px;
+        height: calc(100% - 40px);
+        background: linear-gradient(to bottom, #C5A059, #e2e8f0);
+    }
+    .pdp-timeline-dot {
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 2;
+    }
+</style>
+
+<section class="sh-section-sm pdp-tabs-wrap" style="background: var(--sh-gray-50);">
     <div class="container-fluid px-3 px-md-4 px-lg-5">
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <!-- Tabs Navigation -->
-                <ul class="nav nav-pills justify-content-center gap-2 mb-4" role="tablist">
+                <ul class="nav nav-pills justify-content-center gap-2 gap-md-3 mb-4" role="tablist">
                     <li class="nav-item">
-                        <button class="nav-link active rounded-pill px-4" data-bs-toggle="pill"
-                            data-bs-target="#tab-details">
+                        <button class="nav-link active rounded-pill" data-bs-toggle="pill" data-bs-target="#tab-details">
+                            <i class="bi bi-file-text me-1"></i>
                             <?php echo Helpers::translate('description_bilingual'); ?>
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link rounded-pill px-4" data-bs-toggle="pill" data-bs-target="#tab-shipping">
+                        <button class="nav-link rounded-pill" data-bs-toggle="pill" data-bs-target="#tab-shipping">
+                            <i class="bi bi-truck me-1"></i>
                             <?php echo Helpers::translate('shipping_returns_bilingual'); ?>
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link rounded-pill px-4" data-bs-toggle="pill" data-bs-target="#tab-about">
+                        <button class="nav-link rounded-pill" data-bs-toggle="pill" data-bs-target="#tab-about">
+                            <i class="bi bi-building me-1"></i>
                             <?php echo Helpers::translate('about_us_bilingual'); ?>
                         </button>
                     </li>
                 </ul>
 
-                <!-- Tabs Content -->
-                <div class="tab-content bg-white rounded-4 p-4 p-md-5 shadow-sm">
+                <!-- ═══════════════════════════════════
+                     TAB CONTENT
+                     ═══════════════════════════════════ -->
+                <div class="tab-content pdp-tab-content">
+
+                    <!-- ──────────────────────────────
+                         TAB 1: PRODUCT DESCRIPTION
+                         ────────────────────────────── -->
                     <div class="tab-pane fade show active" id="tab-details">
-                        <div class="mb-4">
-                            <h5 class="fw-bold mb-3">
-                                <?php echo CURRENT_LANG === 'ar' ? 'وصف المنتج' : 'Product Description'; ?>:
-                            </h5>
-                            <div class="text-muted" style="line-height: 1.8;">
+                        
+                        <!-- Section A: Rich Description -->
+                        <div class="p-4 p-md-5">
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#C5A059,#D4AF37);display:flex;align-items:center;justify-content:center;">
+                                    <i class="bi bi-stars text-white" style="font-size:20px;"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-0" style="color:#1e293b;">
+                                        <?php echo CURRENT_LANG === 'ar' ? 'وصف المنتج' : 'Product Description'; ?>
+                                    </h5>
+                                    <span class="text-muted" style="font-size:12px;">Everything you need to know</span>
+                                </div>
+                            </div>
+                            
+                            <div style="font-size:15px; line-height:1.9; color:#475569;">
                                 <?php echo nl2br(Security::escape($product['description'])); ?>
                             </div>
                         </div>
 
-                        <?php if (!empty($product['name_ar']) || CURRENT_LANG === 'ar'): ?>
-                            <div class="mt-4 p-3 rounded-3"
-                                style="background: rgba(212, 175, 55, 0.05); border-left: 4px solid var(--sh-gold);">
-                                <h6 class="fw-bold mb-2">المميزات الرئيسية:</h6>
-                                <ul class="list-unstyled mb-0">
-                                    <li class="mb-2"><i class="bi bi-check2 text-success me-2"></i> مواد عالية الجودة وفخمة
-                                    </li>
-                                    <li class="mb-2"><i class="bi bi-check2 text-success me-2"></i> فحص دقيق للجودة قبل
-                                        الشحن</li>
-                                    <li class="mb-2"><i class="bi bi-check2 text-success me-2"></i> ضمان المصنع الأصلي
-                                        المعتمد</li>
-                                </ul>
+                        <!-- Section B: Why Choose This Product -->
+                        <div class="px-4 px-md-5 pb-4">
+                            <div class="d-flex align-items-center gap-2 mb-4">
+                                <i class="bi bi-patch-check-fill text-success" style="font-size:20px;"></i>
+                                <h6 class="fw-bold mb-0 text-uppercase" style="font-size:13px; letter-spacing:1px; color:#1e293b;">Why Choose This Product</h6>
                             </div>
+                            <div class="row g-3">
+                                <div class="col-6 col-md-3">
+                                    <div class="pdp-feature-card">
+                                        <div class="pdp-feature-icon" style="background:#eef2ff; color:#6366f1;">
+                                            <i class="bi bi-award"></i>
+                                        </div>
+                                        <h6 class="fw-bold mb-1" style="font-size:13px; color:#1e293b;">Premium Quality</h6>
+                                        <p class="text-muted mb-0" style="font-size:11px;">Crafted with the finest materials for lasting durability</p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="pdp-feature-card">
+                                        <div class="pdp-feature-icon" style="background:#ecfdf5; color:#059669;">
+                                            <i class="bi bi-shield-check"></i>
+                                        </div>
+                                        <h6 class="fw-bold mb-1" style="font-size:13px; color:#1e293b;">100% Authentic</h6>
+                                        <p class="text-muted mb-0" style="font-size:11px;">Genuine product with manufacturer warranty</p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="pdp-feature-card">
+                                        <div class="pdp-feature-icon" style="background:#fff7ed; color:#ea580c;">
+                                            <i class="bi bi-lightning-charge"></i>
+                                        </div>
+                                        <h6 class="fw-bold mb-1" style="font-size:13px; color:#1e293b;">Fast Results</h6>
+                                        <p class="text-muted mb-0" style="font-size:11px;">Designed for visible impact from the very first use</p>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <div class="pdp-feature-card">
+                                        <div class="pdp-feature-icon" style="background:#fef2f2; color:#dc2626;">
+                                            <i class="bi bi-heart-pulse"></i>
+                                        </div>
+                                        <h6 class="fw-bold mb-1" style="font-size:13px; color:#1e293b;">Safe & Tested</h6>
+                                        <p class="text-muted mb-0" style="font-size:11px;">Quality tested before shipping to every customer</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section C: What's Included -->
+                        <div class="px-4 px-md-5 pb-4">
+                            <div class="p-4 rounded-4" style="background:linear-gradient(135deg, #fffbeb, #fef3c7); border:1.5px solid #fde68a;">
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <i class="bi bi-box-seam-fill" style="font-size:20px; color:#b45309;"></i>
+                                    <h6 class="fw-bold mb-0 text-uppercase" style="font-size:13px; letter-spacing:1px; color:#92400e;">What's Included</h6>
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-center gap-2 py-2">
+                                            <i class="bi bi-check-circle-fill" style="color:#059669; font-size:16px;"></i>
+                                            <span style="font-size:14px; font-weight:600; color:#1e293b;">1× <?php echo Security::escape($product['name']); ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-center gap-2 py-2">
+                                            <i class="bi bi-check-circle-fill" style="color:#059669; font-size:16px;"></i>
+                                            <span style="font-size:14px; font-weight:600; color:#1e293b;">User Manual / Guide</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-center gap-2 py-2">
+                                            <i class="bi bi-check-circle-fill" style="color:#059669; font-size:16px;"></i>
+                                            <span style="font-size:14px; font-weight:600; color:#1e293b;">Premium Gift Box Packaging</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-center gap-2 py-2">
+                                            <i class="bi bi-check-circle-fill" style="color:#059669; font-size:16px;"></i>
+                                            <span style="font-size:14px; font-weight:600; color:#1e293b;">Quality Guarantee Card</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section D: How to Use (3 Steps) -->
+                        <div class="px-4 px-md-5 pb-4">
+                            <div class="d-flex align-items-center gap-2 mb-4">
+                                <i class="bi bi-lightbulb-fill" style="font-size:20px; color:#C5A059;"></i>
+                                <h6 class="fw-bold mb-0 text-uppercase" style="font-size:13px; letter-spacing:1px; color:#1e293b;">How To Use — 3 Simple Steps</h6>
+                            </div>
+                            <div class="row g-3 g-md-4">
+                                <div class="col-4">
+                                    <div class="pdp-step-card">
+                                        <div class="pdp-step-number">1</div>
+                                        <div class="pdp-step-connector d-none d-md-block"></div>
+                                        <h6 class="fw-bold mb-1" style="font-size:14px; color:#1e293b;">Unbox</h6>
+                                        <p class="text-muted mb-0" style="font-size:11px;">Open your premium package & read the guide</p>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="pdp-step-card">
+                                        <div class="pdp-step-number">2</div>
+                                        <div class="pdp-step-connector d-none d-md-block"></div>
+                                        <h6 class="fw-bold mb-1" style="font-size:14px; color:#1e293b;">Apply</h6>
+                                        <p class="text-muted mb-0" style="font-size:11px;">Use as directed for best results</p>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="pdp-step-card">
+                                        <div class="pdp-step-number">3</div>
+                                        <h6 class="fw-bold mb-1" style="font-size:14px; color:#1e293b;">Enjoy</h6>
+                                        <p class="text-muted mb-0" style="font-size:11px;">See visible results & share your experience</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section E: Arabic Features (Bilingual) -->
+                        <?php if (!empty($product['name_ar']) || CURRENT_LANG === 'ar'): ?>
+                        <div class="px-4 px-md-5 pb-4">
+                            <div class="p-4 rounded-4" style="background: rgba(212, 175, 55, 0.04); border: 1.5px solid rgba(212, 175, 55, 0.15);">
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <div style="width:32px;height:32px;border-radius:8px;background:#C5A059;display:flex;align-items:center;justify-content:center;">
+                                        <i class="bi bi-translate text-white" style="font-size:14px;"></i>
+                                    </div>
+                                    <h6 class="fw-bold mb-0" style="font-size:14px; color:#92400e;" dir="rtl">المميزات الرئيسية</h6>
+                                </div>
+                                <div class="row g-2" dir="rtl">
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-center gap-2 py-2">
+                                            <i class="bi bi-gem" style="color:#C5A059; font-size:16px;"></i>
+                                            <span style="font-size:13px; font-weight:600; color:#1e293b;">مواد عالية الجودة وفخمة</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-center gap-2 py-2">
+                                            <i class="bi bi-clipboard2-check" style="color:#C5A059; font-size:16px;"></i>
+                                            <span style="font-size:13px; font-weight:600; color:#1e293b;">فحص دقيق للجودة قبل الشحن</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-center gap-2 py-2">
+                                            <i class="bi bi-shield-fill-check" style="color:#C5A059; font-size:16px;"></i>
+                                            <span style="font-size:13px; font-weight:600; color:#1e293b;">ضمان المصنع الأصلي المعتمد</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-center gap-2 py-2">
+                                            <i class="bi bi-truck" style="color:#C5A059; font-size:16px;"></i>
+                                            <span style="font-size:13px; font-weight:600; color:#1e293b;">شحن مجاني لجميع الإمارات</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-center gap-2 py-2">
+                                            <i class="bi bi-arrow-repeat" style="color:#C5A059; font-size:16px;"></i>
+                                            <span style="font-size:13px; font-weight:600; color:#1e293b;">سياسة إرجاع سهلة خلال 7 أيام</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="d-flex align-items-center gap-2 py-2">
+                                            <i class="bi bi-cash-coin" style="color:#C5A059; font-size:16px;"></i>
+                                            <span style="font-size:13px; font-weight:600; color:#1e293b;">الدفع عند الاستلام متاح</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <?php endif; ?>
+
+                        <!-- Section F: Guarantee Strip -->
+                        <div class="px-4 px-md-5 pb-5">
+                            <div class="pdp-guarantee-strip">
+                                <div class="row g-3 g-md-4">
+                                    <div class="col-6 col-md-3">
+                                        <div class="pdp-guarantee-item">
+                                            <div class="pdp-guarantee-icon">
+                                                <i class="bi bi-shield-lock-fill" style="color:#22d3ee;"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold" style="font-size:12px;">Secure Payment</div>
+                                                <div style="font-size:10px; color:#94a3b8;">256-bit SSL encrypted</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <div class="pdp-guarantee-item">
+                                            <div class="pdp-guarantee-icon">
+                                                <i class="bi bi-truck" style="color:#34d399;"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold" style="font-size:12px;">Free UAE Delivery</div>
+                                                <div style="font-size:10px; color:#94a3b8;">All 7 Emirates</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <div class="pdp-guarantee-item">
+                                            <div class="pdp-guarantee-icon">
+                                                <i class="bi bi-arrow-counterclockwise" style="color:#fbbf24;"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold" style="font-size:12px;">7-Day Returns</div>
+                                                <div style="font-size:10px; color:#94a3b8;">Hassle-free policy</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <div class="pdp-guarantee-item">
+                                            <div class="pdp-guarantee-icon">
+                                                <i class="bi bi-headset" style="color:#a78bfa;"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold" style="font-size:12px;">24/7 Support</div>
+                                                <div style="font-size:10px; color:#94a3b8;">WhatsApp & Email</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
+                    <!-- ──────────────────────────────
+                         TAB 2: SHIPPING & RETURNS
+                         ────────────────────────────── -->
                     <div class="tab-pane fade" id="tab-shipping">
-                        <div class="mb-4">
-                            <h6 class="fw-bold mb-2">UAE Shipping: <span class="fw-normal text-muted">Delivered within
-                                    4–5 business days</span></h6>
-                            <p class="text-muted small mb-3">Orders are processed daily after confirmation.</p>
-                            <p class="text-muted small" dir="rtl">.يتم تجهيز الطلبات يومياً بعد التأكيد</p>
-                        </div>
+                        <div class="p-4 p-md-5">
+                            <!-- Shipping Timeline -->
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#059669,#10b981);display:flex;align-items:center;justify-content:center;">
+                                    <i class="bi bi-truck text-white" style="font-size:20px;"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-0" style="color:#1e293b;">Shipping & Delivery</h5>
+                                    <span class="text-muted" style="font-size:12px;">We deliver across all 7 Emirates</span>
+                                </div>
+                            </div>
 
-                        <div class="mb-4">
-                            <h6 class="fw-bold mb-2">Tracking Information:</h6>
-                            <p class="text-muted small mb-2">A tracking number will be provided once your order is
-                                shipped.</p>
-                            <p class="text-muted small" dir="rtl">.سيتم تزويدك برقم تتبع بعد شحن الطلب</p>
-                        </div>
+                            <div class="mb-5">
+                                <div class="pdp-timeline-step">
+                                    <div class="pdp-timeline-dot" style="background:#ecfdf5; color:#059669;">
+                                        <i class="bi bi-cart-check"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1" style="font-size:14px;">Order Confirmed</h6>
+                                        <p class="text-muted mb-0" style="font-size:13px;">Your order is received and confirmed instantly</p>
+                                        <p class="mb-0" style="font-size:12px; color:#94a3b8;" dir="rtl">يتم تأكيد طلبك فوراً بعد الشراء</p>
+                                    </div>
+                                </div>
+                                <div class="pdp-timeline-step">
+                                    <div class="pdp-timeline-dot" style="background:#eef2ff; color:#6366f1;">
+                                        <i class="bi bi-box-seam"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1" style="font-size:14px;">Packed & Shipped <span class="badge bg-primary rounded-pill ms-2" style="font-size:10px;">Within 24h</span></h6>
+                                        <p class="text-muted mb-0" style="font-size:13px;">Quality checked, packed in premium packaging, and shipped</p>
+                                        <p class="mb-0" style="font-size:12px; color:#94a3b8;" dir="rtl">يتم فحص الجودة والتغليف الفاخر والشحن خلال 24 ساعة</p>
+                                    </div>
+                                </div>
+                                <div class="pdp-timeline-step">
+                                    <div class="pdp-timeline-dot" style="background:#fff7ed; color:#ea580c;">
+                                        <i class="bi bi-geo-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1" style="font-size:14px;">Tracking Provided</h6>
+                                        <p class="text-muted mb-0" style="font-size:13px;">A tracking number (SMS + Email) so you can follow your parcel</p>
+                                        <p class="mb-0" style="font-size:12px; color:#94a3b8;" dir="rtl">سيتم تزويدك برقم تتبع عبر الرسائل والبريد الإلكتروني</p>
+                                    </div>
+                                </div>
+                                <div class="pdp-timeline-step">
+                                    <div class="pdp-timeline-dot" style="background:#ecfdf5; color:#059669;">
+                                        <i class="bi bi-house-check"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1" style="font-size:14px;">Delivered to Your Door <span class="badge bg-success rounded-pill ms-2" style="font-size:10px;">4-5 Days</span></h6>
+                                        <p class="text-muted mb-0" style="font-size:13px;">Delivered safely to your address across all UAE Emirates</p>
+                                        <p class="mb-0" style="font-size:12px; color:#94a3b8;" dir="rtl">توصيل آمن إلى عنوانك في جميع إمارات الدولة</p>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <div class="mb-4">
-                            <h6 class="fw-bold mb-2">7-Day Return Policy | <span dir="rtl">سياسة الإرجاع خلال 7
-                                    أيام</span></h6>
-                            <p class="text-muted small mb-2">If you're not completely satisfied, you may return the item
-                                within 7 days of delivery, subject to our return policy.</p>
-                            <p class="text-muted small" dir="rtl">في حال عدم الرضا، يمكن إرجاع المنتج خلال 7 أيام من
-                                تاريخ الاستلام.</p>
+                            <!-- Return Policy -->
+                            <div class="p-4 rounded-4" style="background:#fef2f2; border:1.5px solid #fecaca;">
+                                <div class="d-flex align-items-center gap-3 mb-3">
+                                    <div style="width:40px;height:40px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+                                        <i class="bi bi-arrow-counterclockwise" style="font-size:18px; color:#dc2626;"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-0" style="font-size:14px; color:#991b1b;">7-Day Return Policy | <span dir="rtl">سياسة الإرجاع خلال 7 أيام</span></h6>
+                                    </div>
+                                </div>
+                                <p class="mb-2" style="font-size:13px; color:#475569;">If you're not completely satisfied, you may return the item within <strong>7 days</strong> of delivery, subject to our return policy. Items must be in original, unused condition.</p>
+                                <p class="mb-0" style="font-size:13px; color:#94a3b8;" dir="rtl">في حال عدم الرضا، يمكن إرجاع المنتج خلال 7 أيام من تاريخ الاستلام بشرط أن يكون بحالته الأصلية.</p>
+                            </div>
                         </div>
                     </div>
 
+                    <!-- ──────────────────────────────
+                         TAB 3: ABOUT US
+                         ────────────────────────────── -->
                     <div class="tab-pane fade" id="tab-about">
-                        <h5 class="fw-bold mb-3"><?php echo Helpers::translate('about_us_bilingual'); ?></h5>
-                        <div class="text-muted" style="line-height: 1.8;">
-                            <p class="mb-3">
-                                At <strong>Edluxury</strong>, we are passionate about providing quality products that
-                                make everyday life easier and more enjoyable.
-                            </p>
-                            <p class="mb-4" dir="rtl">
-                                في <strong>إيدلوكسري</strong>، نحن ملتزمون بتقديم منتجات عالية الجودة تسهّل حياتك
-                                اليومية وتجعلها أكثر متعة.
-                            </p>
+                        <div class="p-4 p-md-5">
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#1e293b,#334155);display:flex;align-items:center;justify-content:center;">
+                                    <i class="bi bi-building text-white" style="font-size:20px;"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-0" style="color:#1e293b;"><?php echo Helpers::translate('about_us_bilingual'); ?></h5>
+                                    <span class="text-muted" style="font-size:12px;">UAE's trusted premium store</span>
+                                </div>
+                            </div>
 
-                            <p class="mb-3">
-                                We focus on reliable UAE delivery, fast service, and ensuring our customers can shop
-                                with confidence.
-                            </p>
-                            <p class="mb-4" dir="rtl">
-                                نحن نحرص على توصيل الطلبات داخل الإمارات بسرعة وموثوقية، ونضمن تجربة تسوق آمنة ومريحة
-                                لعملائنا.
-                            </p>
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-6">
+                                    <div class="p-4 rounded-4 h-100" style="background:#f8fafc; border:1px solid #f1f5f9;">
+                                        <i class="bi bi-gem" style="font-size:28px; color:#C5A059;"></i>
+                                        <h6 class="fw-bold mt-3 mb-2" style="font-size:14px;">Our Promise</h6>
+                                        <p class="mb-0" style="font-size:13px; line-height:1.8; color:#475569;">
+                                            At <strong>Edluxury</strong>, we are passionate about providing quality products that make everyday life easier and more enjoyable. Every product is hand-selected and quality-checked before reaching you.
+                                        </p>
+                                        <p class="mt-3 mb-0" style="font-size:13px; line-height:1.8; color:#94a3b8;" dir="rtl">
+                                            في <strong>إيدلوكسري</strong>، نحن ملتزمون بتقديم منتجات عالية الجودة تسهّل حياتك اليومية وتجعلها أكثر متعة. كل منتج يتم اختياره بعناية وفحصه قبل أن يصل إليك.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="p-4 rounded-4 h-100" style="background:#f8fafc; border:1px solid #f1f5f9;">
+                                        <i class="bi bi-rocket-takeoff" style="font-size:28px; color:#6366f1;"></i>
+                                        <h6 class="fw-bold mt-3 mb-2" style="font-size:14px;">Our Mission</h6>
+                                        <p class="mb-0" style="font-size:13px; line-height:1.8; color:#475569;">
+                                            We focus on reliable UAE delivery, fast service, and ensuring our customers can shop with confidence. Our mission is simple: to bring convenience, quality, and trust to your doorstep.
+                                        </p>
+                                        <p class="mt-3 mb-0" style="font-size:13px; line-height:1.8; color:#94a3b8;" dir="rtl">
+                                            نحن نحرص على توصيل الطلبات داخل الإمارات بسرعة وموثوقية. مهمتنا بسيطة: تقديم الراحة والجودة والثقة مباشرة إلى باب منزلك.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <p class="mb-3">
-                                Our mission is simple: to bring convenience, quality, and trust to your doorstep.
-                            </p>
-                            <p class="mb-0" dir="rtl">
-                                مهمتنا بسيطة: تقديم الراحة والجودة والثقة مباشرة إلى باب منزلك.
-                            </p>
+                            <!-- Stats -->
+                            <div class="row g-3 text-center">
+                                <div class="col-3">
+                                    <div class="p-3 rounded-3" style="background:#eef2ff;">
+                                        <div class="fw-bold fs-4" style="color:#6366f1;">500+</div>
+                                        <div class="text-muted" style="font-size:11px;">Happy Customers</div>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="p-3 rounded-3" style="background:#ecfdf5;">
+                                        <div class="fw-bold fs-4" style="color:#059669;">4.9</div>
+                                        <div class="text-muted" style="font-size:11px;">Average Rating</div>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="p-3 rounded-3" style="background:#fff7ed;">
+                                        <div class="fw-bold fs-4" style="color:#ea580c;">7</div>
+                                        <div class="text-muted" style="font-size:11px;">Emirates Covered</div>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="p-3 rounded-3" style="background:#fef2f2;">
+                                        <div class="fw-bold fs-4" style="color:#dc2626;">24/7</div>
+                                        <div class="text-muted" style="font-size:11px;">Customer Support</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </section>
 
@@ -1704,7 +2343,7 @@ $sampleReviews = [
 
             <!-- Reviews List -->
             <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
-                <div class="sh-reviews-section">
+                <div class="sh-reviews-section" id="reviewsContainer">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h5 class="fw-bold mb-0"><?php echo Helpers::translate('recent_feedback'); ?></h5>
                         <select class="form-select w-auto border-0" style="font-size: 14px;">
@@ -1713,6 +2352,8 @@ $sampleReviews = [
                             <option><?php echo CURRENT_LANG === 'ar' ? 'الأقل تقييماً' : 'Lowest Rated'; ?></option>
                         </select>
                     </div>
+
+                    <div id="new-reviews-anchor"></div>
 
                     <?php foreach ($sampleReviews as $index => $review): ?>
                         <div class="sh-review-card" data-aos="fade-up" data-aos-delay="<?php echo $index * 100; ?>">
@@ -1967,6 +2608,10 @@ $sampleReviews = [
         const qty = parseInt(document.getElementById('purchase-qty').value);
         if (typeof Cart !== 'undefined') {
             Cart.add(productId, qty);
+            // Log analytics
+            if (typeof logAnalytics === 'function') {
+                logAnalytics('add_to_cart', productId, qty);
+            }
         } else {
             alert('Added to cart!');
         }
@@ -1974,7 +2619,12 @@ $sampleReviews = [
 
     // Buy Now
     function buyNow() {
+        const qty = parseInt(document.getElementById('purchase-qty').value);
         addToCart();
+        // Log analytics
+        if (typeof logAnalytics === 'function') {
+            logAnalytics('buy_now_click', productId, qty);
+        }
         setTimeout(() => {
             window.location.href = '<?php echo Helpers::url('checkout.php'); ?>';
         }, 500);
@@ -3117,6 +3767,315 @@ document.addEventListener('keydown', function (e) {
         if (typeof buyNow === 'function') buyNow();
     }
 });
+<!-- 🚀 DESKTOP FLOATING BUY BAR -->
+<div id="desktop-floating-bar" class="d-none d-lg-block">
+    <div class="container-fluid px-lg-5 h-100">
+        <div class="d-flex align-items-center justify-content-between h-100">
+            <div class="d-flex align-items-center gap-3">
+                <div class="floating-bar-img">
+                    <img src="<?php echo Helpers::upload($productImages[0]['image_path']); ?>" alt="">
+                </div>
+                <div>
+                    <div class="floating-bar-title fw-bold text-truncate" style="max-width: 300px;"><?php echo Security::escape($product['name']); ?></div>
+                    <div class="floating-bar-price fw-extrabold text-primary"><?php echo Helpers::formatPrice($product['price']); ?></div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-4">
+                <div class="d-flex align-items-center gap-2 text-success fw-bold" style="font-size: 13px;">
+                    <i class="bi bi-patch-check-fill"></i> In Stock & Ready to Ship
+                </div>
+                <button class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm" style="background:linear-gradient(135deg,#0F3D3E 0%,#1a5f61 100%); border:none; height: 48px;" onclick="buyNow()">
+                    BUY NOW — EXPRESS
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #desktop-floating-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        z-index: 1000;
+        transform: translateY(-100%);
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border-bottom: 2px solid #f0f0f5;
+    }
+    #desktop-floating-bar.visible { transform: translateY(0); }
+    .floating-bar-img { width: 50px; height: 50px; border-radius: 8px; overflow: hidden; border: 1px solid #eee; }
+    .floating-bar-img img { width: 100%; height: 100%; object-fit: cover; }
+    .floating-bar-title { font-size: 15px; color: #121826; }
+    .floating-bar-price { font-size: 18px; }
+</style>
+
+<script>
+window.addEventListener('scroll', function() {
+    if (window.innerWidth < 992) return;
+    const bar = document.getElementById('desktop-floating-bar');
+    const btc = document.getElementById('buyNowBtn'); // Main button
+    if (!btc) return;
+    
+    const btcRect = btc.getBoundingClientRect();
+    if (btcRect.top < 0) {
+        bar.classList.add('visible');
+    } else {
+        bar.classList.remove('visible');
+    }
+}, { passive: true });
 </script>
+
+
+<!-- Social Proof: Recently Purchased (Premium Animation) -->
+<div id="social-proof-toast" class="social-proof-toast" style="display:none;">
+    <div class="toast-content">
+        <div class="toast-img-wrap">
+            <img id="toast-product-img" src="<?php echo Helpers::upload($productImages[0]['image_path']); ?>" alt="Product">
+        </div>
+        <div class="toast-details">
+            <div class="toast-buyer-info">
+                <span id="toast-buyer-name" class="fw-bold">Ali R.</span> from <span id="toast-buyer-city" class="fw-bold">Dubai</span>
+            </div>
+            <div class="toast-action-info">just purchased this item</div>
+            <div class="toast-time-info"><i class="bi bi-clock me-1"></i> <span id="toast-time">2</span> min ago</div>
+        </div>
+        <button class="toast-close-btn" onclick="document.getElementById('social-proof-toast').classList.remove('active')">&times;</button>
+    </div>
+</div>
+
+<style>
+    .social-proof-toast {
+        position: fixed;
+        bottom: 24px;
+        left: 24px;
+        background: #ffffff;
+        border: 1px solid #f0f0f5;
+        border-radius: 16px;
+        padding: 12px 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        z-index: 9999;
+        max-width: 320px;
+        transform: translateY(150%);
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        font-family: 'Inter', sans-serif;
+    }
+    .social-proof-toast.active {
+        transform: translateY(0);
+    }
+    .toast-content { display: flex; align-items: center; gap: 14px; position: relative; width: 100%; }
+    .toast-img-wrap { width: 54px; height: 54px; border-radius: 10px; overflow: hidden; flex-shrink: 0; background: #f8f8fa; }
+    .toast-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .toast-details { flex: 1; }
+    .toast-buyer-info { font-size: 13px; color: #1e293b; margin-bottom: 2px; }
+    .toast-action-info { font-size: 11px; color: #64748b; margin-bottom: 3px; }
+    .toast-time-info { font-size: 10px; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
+    .toast-close-btn { position: absolute; top: -10px; right: -10px; width: 20px; height: 20px; background: #fff; border: 1px solid #eee; border-radius: 50%; font-size: 14px; line-height: 1; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    
+    @media (max-width: 767px) {
+        .social-proof-toast { left: 16px; right: 16px; bottom: 16px; max-width: none; width: calc(100% - 32px); }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const names = ['Sultan A.', 'Hind M.', 'Khalid H.', 'Sarah J.', 'Zayed N.', 'Fatima S.', 'Omar K.', 'Noura B.', 'Rashed Q.', 'Maryam L.'];
+    const cities = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman', 'Ras Al Khaimah', 'Fujairah', 'Al Ain'];
+    
+    const toast = document.getElementById('social-proof-toast');
+    const nameEl = document.getElementById('toast-buyer-name');
+    const cityEl = document.getElementById('toast-buyer-city');
+    const timeEl = document.getElementById('toast-time');
+    
+    toast.style.display = 'flex';
+    
+    function showToast() {
+        nameEl.textContent = names[Math.floor(Math.random() * names.length)];
+        cityEl.textContent = cities[Math.floor(Math.random() * cities.length)];
+        timeEl.textContent = Math.floor(Math.random() * 8) + 1;
+        
+        toast.classList.add('active');
+        
+        setTimeout(() => {
+            toast.classList.remove('active');
+        }, 6000);
+    }
+    
+    // Initial delay then repeat
+    setTimeout(showToast, 8000);
+    setInterval(showToast, 35000);
+});
+</script>
+
+<!-- Write Review Modal -->
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:20px; border:none; box-shadow:0 20px 50px rgba(0,0,0,0.1);">
+            <div class="modal-header" style="border-bottom: 1px solid #f1f5f9; padding: 20px 24px;">
+                <h5 class="modal-title fw-bold" id="reviewModalLabel" style="color: #1e293b;">Write a Review</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="padding: 24px;">
+                <form id="submitReviewForm" onsubmit="return submitReview(event);" action="javascript:void(0);">
+                    <div class="mb-3 text-center">
+                        <label class="form-label text-muted" style="font-size:13px; font-weight:600;">Rate your experience</label>
+                        <div class="d-flex justify-content-center gap-2" id="starRatingSelect">
+                            <i class="bi bi-star-fill text-warning fs-3" data-rating="1" style="cursor:pointer;" onclick="setRating(1)"></i>
+                            <i class="bi bi-star-fill text-warning fs-3" data-rating="2" style="cursor:pointer;" onclick="setRating(2)"></i>
+                            <i class="bi bi-star-fill text-warning fs-3" data-rating="3" style="cursor:pointer;" onclick="setRating(3)"></i>
+                            <i class="bi bi-star-fill text-warning fs-3" data-rating="4" style="cursor:pointer;" onclick="setRating(4)"></i>
+                            <i class="bi bi-star-fill text-warning fs-3" data-rating="5" style="cursor:pointer;" onclick="setRating(5)"></i>
+                        </div>
+                        <input type="hidden" id="reviewRatingInput" value="5">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:13px; font-weight:600; color:#475569;">Full Name</label>
+                        <input type="text" class="form-control" id="reviewName" required placeholder="Enter your full name" style="border-radius:10px; border: 1.5px solid #e2e8f0; padding:10px 15px;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:13px; font-weight:600; color:#475569;">City / Location</label>
+                        <input type="text" class="form-control" id="reviewLocation" required placeholder="e.g. Dubai, UAE" style="border-radius:10px; border: 1.5px solid #e2e8f0; padding:10px 15px;">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" style="font-size:13px; font-weight:600; color:#475569;">Your Review</label>
+                        <textarea class="form-control" id="reviewText" required rows="4" placeholder="What did you think of the product?" style="border-radius:10px; border: 1.5px solid #e2e8f0; padding:10px 15px; resize:none;"></textarea>
+                    </div>
+                    <button type="submit" class="sh-btn sh-btn-primary sh-btn-full" style="border-radius: 12px; font-weight:700; height: 50px;">
+                        Submit Review
+                    </button>
+                    <p class="text-center mt-3 mb-0" style="font-size:11px; color:#94a3b8;"><i class="bi bi-shield-check text-success"></i> Your review will be verified before publishing.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setRating(rating) {
+        document.getElementById('reviewRatingInput').value = rating;
+        const stars = document.querySelectorAll('#starRatingSelect i');
+        stars.forEach(star => {
+            if(parseInt(star.getAttribute('data-rating')) <= rating) {
+                star.classList.replace('bi-star', 'bi-star-fill');
+                star.classList.add('text-warning');
+                star.style.color = '';
+            } else {
+                star.classList.replace('bi-star-fill', 'bi-star');
+                star.classList.remove('text-warning');
+                star.style.color = '#ccc';
+            }
+        });
+    }
+
+    function submitReview(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('reviewName').value;
+        const location = document.getElementById('reviewLocation').value;
+        const text = document.getElementById('reviewText').value;
+        const rating = parseInt(document.getElementById('reviewRatingInput').value);
+        
+        // Create review element HTML
+        const avatarInitial = name.charAt(0).toUpperCase();
+        let starsHtml = '';
+        for(let i=0; i<rating; i++) starsHtml += '<i class="bi bi-star-fill"></i>';
+        
+        const reviewHtml = `
+            <div class="sh-review-card" style="animation: slideDown 0.5s ease; background: #fdfdfd; border-left: 4px solid var(--sh-gold);">
+                <div class="sh-review-header">
+                    <div class="sh-review-author">
+                        <div class="sh-review-avatar" style="background: var(--sh-gold);">
+                            ${avatarInitial}
+                        </div>
+                        <div>
+                            <div class="sh-review-name d-flex align-items-center gap-2">
+                                ${name}
+                                <span class="badge rounded-pill bg-light text-dark border fw-normal" style="font-size: 10px;">New</span>
+                            </div>
+                            <div class="sh-review-date">
+                                <i class="bi bi-geo-alt me-1"></i> ${location} • Just now
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <div class="sh-review-stars mb-1" style="color:var(--sh-gold);">
+                            ${starsHtml}
+                        </div>
+                        <div class="d-flex align-items-center justify-content-end gap-1">
+                            <span class="sh-verified-badge pulse-badge" style="background:#ecfdf5; color:#059669; font-size:11px; padding:3px 8px; border-radius:12px;">
+                                <i class="bi bi-patch-check-fill"></i> Verified Buyer
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <p class="sh-review-text mb-0" style="text-align: left;" dir="ltr">
+                    ${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
+                </p>
+            </div>
+        `;
+        
+        const anchor = document.getElementById('new-reviews-anchor');
+        if (anchor) anchor.insertAdjacentHTML('afterend', reviewHtml);
+        
+        // Close modal
+        var myModalEl = document.getElementById('reviewModal');
+        var modal = null;
+        if (typeof bootstrap !== 'undefined') {
+            modal = bootstrap.Modal.getInstance(myModalEl) || new bootstrap.Modal(myModalEl);
+        }
+        if (modal) {
+            modal.hide();
+        } else {
+            myModalEl.classList.remove('show');
+            myModalEl.style.display = 'none';
+        }
+        
+        // Reset form
+        document.getElementById('submitReviewForm').reset();
+        setRating(5);
+        
+        // Show success alert
+        alert('Thank you! Your verified review has been published.');
+        return false;
+    }
+
+    // Translation toggle
+    function toggleTranslation(index) {
+        var btn = document.querySelector('button[onclick="toggleTranslation(' + index + ')"]');
+        var textEl = document.getElementById('review-text-' + index);
+        
+        if (btn && textEl) {
+            var en = btn.getAttribute('data-en');
+            var ar = btn.getAttribute('data-ar');
+            var current = btn.getAttribute('data-current');
+            
+            if (current === 'en') {
+                textEl.textContent = ar;
+                textEl.dir = 'rtl';
+                textEl.style.textAlign = 'right';
+                btn.innerHTML = '<i class="bi bi-translate me-1"></i> ' + (current === 'en' ? 'Show in English' : 'Show in English');
+                btn.setAttribute('data-current', 'ar');
+            } else {
+                textEl.textContent = en;
+                textEl.dir = 'ltr';
+                textEl.style.textAlign = 'left';
+                btn.innerHTML = '<i class="bi bi-translate me-1"></i> ' + (current === 'ar' ? 'Show in Arabic' : 'Show in Arabic');
+                btn.setAttribute('data-current', 'en');
+            }
+        }
+    }
+</script>
+
+<style>
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
 
 <?php require_once 'includes/footer.php'; ?>

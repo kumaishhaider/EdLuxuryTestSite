@@ -23,6 +23,21 @@ $totalCustomers = $db->count('users');
 
 // Recent orders
 $recentOrders = $db->fetchAll("SELECT * FROM orders ORDER BY created_at DESC LIMIT 6");
+
+// Analytics Stats
+$totalAddCarts = $db->count('analytics_events', "event_type = 'add_to_cart'");
+$totalWhatsApp = $db->count('analytics_events', "event_type = 'whatsapp_click'");
+$totalWishlist = $db->count('analytics_events', "event_type = 'wishlist_add'");
+
+$topAddedProducts = $db->fetchAll("
+    SELECT p.name, COUNT(ae.id) as add_count 
+    FROM analytics_events ae 
+    JOIN products p ON ae.product_id = p.id 
+    WHERE ae.event_type = 'add_to_cart' 
+    GROUP BY ae.product_id 
+    ORDER BY add_count DESC 
+    LIMIT 3
+");
 ?>
 
 <div class="row g-4 mb-4">
@@ -49,13 +64,110 @@ $recentOrders = $db->fetchAll("SELECT * FROM orders ORDER BY created_at DESC LIM
         </div>
     </div>
     <div class="col-md-3">
-        <div class="admin-card text-center">
-            <div class="stat-label mb-2">Registered Buyers</div>
-            <div class="stat-val"><?php echo number_format($totalCustomers); ?></div>
-            <div class="text-muted small mt-2">Verified emails</div>
+        <div class="admin-card text-center border-top border-warning border-4">
+            <div class="stat-label mb-2">Cart Interactions</div>
+            <div class="stat-val"><?php echo number_format($totalAddCarts); ?></div>
+            <div class="text-warning small fw-bold mt-2"><i class="bi bi-cart-plus"></i> Consumer Taps</div>
         </div>
     </div>
 </div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="admin-card d-flex align-items-center gap-4 border-start border-success border-4">
+            <div class="rounded-circle bg-success-subtle p-3 text-success">
+                <i class="bi bi-whatsapp fs-3"></i>
+            </div>
+            <div>
+                <div class="stat-label mb-1">WhatsApp Order Intents</div>
+                <div class="stat-val" style="font-size: 1.8rem;"><?php echo number_format($totalWhatsApp); ?></div>
+                <div class="text-muted small">Direct consumer messages initiated</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="admin-card d-flex align-items-center gap-4 border-start border-danger border-4">
+            <div class="rounded-circle bg-danger-subtle p-3 text-danger">
+                <i class="bi bi-heart-fill fs-3"></i>
+            </div>
+            <div>
+                <div class="stat-label mb-1">Wishlist Saves</div>
+                <div class="stat-val" style="font-size: 1.8rem;"><?php echo number_format($totalWishlist); ?></div>
+                <div class="text-muted small">Items consumers plan to buy later</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- QUICK ACTIONS & ALERTS -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="admin-card">
+            <h6 class="fw-bold mb-4 d-flex align-items-center gap-2">
+                <i class="bi bi-lightning-fill text-warning"></i> Quick Management Shortcuts
+            </h6>
+            <div class="row g-3">
+                <div class="col-6 col-md-3">
+                    <a href="<?php echo Helpers::adminUrl('product-form.php'); ?>" class="d-block text-center text-decoration-none p-3 rounded-3 bg-light border hover-shadow-sm transition-all" style="color: #4f46e5;">
+                        <i class="bi bi-plus-circle fs-3 mb-2 d-inline-block"></i>
+                        <div class="small fw-bold">Add Product</div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="<?php echo Helpers::adminUrl('category-form.php'); ?>" class="d-block text-center text-decoration-none p-3 rounded-3 bg-light border hover-shadow-sm transition-all" style="color: #0891b2;">
+                        <i class="bi bi-tag fs-3 mb-2 d-inline-block"></i>
+                        <div class="small fw-bold">New Category</div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="<?php echo Helpers::adminUrl('collection-form.php'); ?>" class="d-block text-center text-decoration-none p-3 rounded-3 bg-light border hover-shadow-sm transition-all" style="color: #059669;">
+                        <i class="bi bi-collection fs-3 mb-2 d-inline-block"></i>
+                        <div class="small fw-bold">New Collection</div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="<?php echo Helpers::url(); ?>" target="_blank" class="d-block text-center text-decoration-none p-3 rounded-3 bg-light border hover-shadow-sm transition-all" style="color: #64748b;">
+                        <i class="bi bi-globe fs-3 mb-2 d-inline-block"></i>
+                        <div class="small fw-bold">View Store</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="admin-card bg-white border-0">
+            <h6 class="fw-bold mb-4 d-flex align-items-center gap-2">
+                <i class="bi bi-exclamation-triangle-fill text-danger"></i> Inventory Alerts
+            </h6>
+            <?php
+            $lowStockProducts = $db->fetchAll("SELECT name, stock_quantity FROM products WHERE stock_quantity < 5 AND status = 'active' LIMIT 4");
+            if (empty($lowStockProducts)):
+            ?>
+                <div class="text-center py-4 bg-light rounded-3">
+                    <i class="bi bi-shield-check text-success fs-1"></i>
+                    <p class="small text-muted mb-0 mt-2">All items are sufficiently stocked.</p>
+                </div>
+            <?php else: ?>
+                <div class="d-flex flex-column gap-2">
+                    <?php foreach ($lowStockProducts as $lp): ?>
+                        <div class="p-2 px-3 rounded-3 border-start border-4 border-danger bg-danger-subtle d-flex justify-content-between align-items-center">
+                            <div class="small fw-bold text-dark truncate-text" style="max-width: 150px;"><?php echo Security::escape($lp['name']); ?></div>
+                            <span class="badge bg-danger rounded-pill"><?php echo $lp['stock_quantity']; ?> left</span>
+                        </div>
+                    <?php endforeach; ?>
+                    <a href="<?php echo Helpers::adminUrl('products.php'); ?>" class="btn btn-sm btn-link text-decoration-none small fw-bold">Review full inventory &rarr;</a>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-shadow-sm:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-3px); }
+    .transition-all { transition: all 0.2s ease; }
+    .truncate-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+</style>
 
 <div class="row g-4">
     <!-- Orders Status Table -->
@@ -140,12 +252,50 @@ $recentOrders = $db->fetchAll("SELECT * FROM orders ORDER BY created_at DESC LIM
                     </div>
                 </div>
             </div>
+
+            <hr class="my-4">
+            
+            <h6 class="fw-bold mb-3">Top Selling Products</h6>
+            <div class="d-flex flex-column gap-2 mb-4">
+                <?php
+                $topProducts = $db->fetchAll("SELECT product_name, SUM(quantity) as total_sold FROM order_items GROUP BY product_id ORDER BY total_sold DESC LIMIT 3");
+                if (empty($topProducts)):
+                ?>
+                    <p class="small text-muted italic">No sales data yet.</p>
+                <?php else: ?>
+                    <?php foreach ($topProducts as $tp): ?>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded-2 hover-bg-light">
+                            <div class="small fw-semibold text-truncate" style="max-width: 140px;"><?php echo Security::escape($tp['product_name']); ?></div>
+                            <div class="badge bg-light text-primary border"><?php echo $tp['total_sold']; ?> sold</div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+
+            <h6 class="fw-bold mb-3">Most Added to Cart</h6>
+            <div class="d-flex flex-column gap-2">
+                <?php if (empty($topAddedProducts)): ?>
+                    <p class="small text-muted italic">No cart data yet.</p>
+                <?php else: ?>
+                    <?php foreach ($topAddedProducts as $tap): ?>
+                        <div class="d-flex justify-content-between align-items-center p-2 rounded-2 hover-bg-light">
+                            <div class="small fw-semibold text-truncate" style="max-width: 140px;"><?php echo Security::escape($tap['name']); ?></div>
+                            <div class="badge bg-light text-warning border"><?php echo $tap['add_count']; ?> taps</div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+
             <div class="mt-5 text-center">
                 <a href="<?php echo Helpers::adminUrl('products.php'); ?>"
-                    class="btn btn-primary w-100 py-2 fw-bold">Manage Inventory</a>
+                    class="btn btn-primary w-100 py-2 fw-bold shadow-sm">Manage Inventory</a>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .hover-bg-light:hover { background: #f8fafc; }
+</style>
 
 <?php require_once 'includes/footer.php'; ?>
