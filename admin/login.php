@@ -22,7 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Please enter both username and password';
     } else {
         $db = Database::getInstance();
-        $admin = $db->fetchOne("SELECT * FROM admins WHERE username = ? AND status = 'active'", [$username]);
+        $admin = $db->fetchOne(
+            "SELECT * FROM admins WHERE username = ? AND status = 'active'",
+            [$username]
+        );
 
         if ($admin && Security::verifyPassword($password, $admin['password'])) {
             $_SESSION['admin_id'] = $admin['id'];
@@ -45,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - Edluxury</title>
-    <!-- Favicon -->
     <?php
     $theme = Theme::getInstance();
     $faviconUrl = $theme->get('favicon_url');
@@ -111,12 +113,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <i class="bi bi-box-arrow-in-right me-2"></i>Login
                     </button>
                 </form>
-
-                <div class="text-center mt-4">
-                    <small class="text-muted">
-                        Default credentials: <strong>admin</strong> / <strong>admin123</strong>
-                    </small>
-                </div>
             </div>
         </div>
     </div>
